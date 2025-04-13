@@ -17,14 +17,15 @@ public class Knockback : MonoBehaviour
 
     private float flashDuration = 5f;
 
-    void Awake()
+    private void Awake()
     {
         _wait = new WaitForSeconds(0.1f);
 
         _rigidbody = GetComponent<Rigidbody2D>();
         _renderer = GetComponentInChildren<Renderer>();
 
-        if (_renderer != null) _originalColor = _renderer.material.color;
+        if (_renderer != null) 
+            _originalColor = _renderer.material.color;
     }
 
     public void ApplyKnockback(Vector3 enemyPosition)
@@ -39,8 +40,11 @@ public class Knockback : MonoBehaviour
 
         if (_renderer != null)
         {
-            if (_flashRoutine != null) StopCoroutine(_flashRoutine);
+            if (_flashRoutine != null)
+            { 
+                StopCoroutine(_flashRoutine);
                 _flashRoutine = StartCoroutine(FlashEffect());
+            }
         }
     }
 

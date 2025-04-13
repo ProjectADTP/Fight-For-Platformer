@@ -46,9 +46,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         if (_stats.Health <= 0)
-        {
             Destroy(gameObject);
-        }
     }
 
     private void StartPatrol()
@@ -67,5 +65,15 @@ public class Enemy : MonoBehaviour
 
         if (_stats.Health <= 0)
             Destroy(gameObject);
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public int GetDamage()
+    {
+        return _stats.Damage;
     }
 }

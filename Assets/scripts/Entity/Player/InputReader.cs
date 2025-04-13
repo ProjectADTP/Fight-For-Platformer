@@ -24,6 +24,7 @@ public class InputReader : MonoBehaviour
     {
         bool localValue = value;
         value = false;
+
         return localValue;
     }
 }

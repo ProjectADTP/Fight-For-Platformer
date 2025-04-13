@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private PlayerAnimator _playerAnimator;
     private Teleporter _teleporter;
     private Knockback _knockback;
+    private Jumper _jumper;
 
     private Vector3 _basePosition;
 
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
         _playerAnimator = GetComponent<PlayerAnimator>();
         _inputReader = GetComponent<InputReader>();
         _mover = GetComponent<Mover>();
+        _jumper = GetComponent<Jumper>();
         _collisionDetector = GetComponent<CollisionDetector>();
         _teleporter = GetComponent<Teleporter>();
         _knockback = GetComponent<Knockback>();
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _collisionDetector.TakedHealth += Healing;
+        _collisionDetector.TakedHealth += RestoreHealth;
         _collisionDetector.TakedDamage += TakeDamage;
     }
 
@@ -42,7 +44,7 @@ public class Player : MonoBehaviour
             _mover.Move(_inputReader.Direction);
 
         if (_inputReader.GetIsJump() && _collisionDetector.IsGround)
-            _mover.Jump();
+            _jumper.Jump();
     }
 
     private void Update()
@@ -54,36 +56,27 @@ public class Player : MonoBehaviour
             Respawn();
     }
 
-    private void Healing(int health)
+    private void RestoreHealth(int health)
     {
         _stats.RestoreHealth(health);
 
-        Debug.Log($"Восстановлено {health}, текущее здоровье: " + _stats.Health);
-
-        _collisionDetector.TakedHealth -= Healing;
+        _collisionDetector.TakedHealth -= RestoreHealth;
     }
 
     private void TakeDamage(int damage,Vector3 enemyDirection)
     {
         _stats.TakeDamage(damage);
 
-        Debug.Log("Получил:" + damage.ToString() + "осталось:" + _stats.Health);
-
         if (_stats.Health <= 0)
-        {
             Respawn();
-        }
         else
-        {
             _knockback.ApplyKnockback(enemyDirection);
-        }
     }
 
     private void Respawn()
     {
         _teleporter.TeleportToStart(_basePosition);
-        _stats.RestoreHealth(0);
 
-        Debug.Log("Здоровье восстановлено:" + _stats.Health);
+        _stats.RestoreHealth(0);
     }
 }

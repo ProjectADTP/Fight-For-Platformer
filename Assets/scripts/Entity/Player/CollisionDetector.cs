@@ -36,7 +36,7 @@ public class CollisionDetector : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
-            TakedDamage?.Invoke(enemy.GetComponent<Stats>().Damage, enemy.transform.position);
+            TakedDamage?.Invoke(enemy.GetDamage(), enemy.GetPosition());
     }
 
     private void OnTriggerExit2D(Collider2D collision)

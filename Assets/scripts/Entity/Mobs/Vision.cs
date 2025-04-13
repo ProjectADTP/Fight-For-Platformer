@@ -43,22 +43,15 @@ public class Vision : MonoBehaviour
 
     private void PerformRaycast()
     {
-        if (_movementDirection == Vector3.zero) return;
+        if (_movementDirection == Vector3.zero) 
+            return;
 
         Vector3 startPosition = transform.position + (_movementDirection / 2);
 
         if (_isTargetSeed == false)
-        {
-            Debug.DrawRay(startPosition, _movementDirection * rayLength, Color.red);
-
             hit = Physics2D.Raycast(startPosition, _movementDirection, rayLength);
-        }
         else 
-        {
-            Debug.DrawRay(startPosition, _movementTargetDirection * rayLength, Color.red);
-
             hit = Physics2D.Raycast(startPosition, _movementTargetDirection, rayLength);
-        }
 
         if (hit.collider != null)
         {

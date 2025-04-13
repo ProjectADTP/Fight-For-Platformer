@@ -38,12 +38,14 @@ public class FirstAidMover : MonoBehaviour
             while (transform.localScale.x < _maxScale)
             {
                 transform.localScale += Vector3.one * _pulseSpeed * Time.deltaTime;
+
                 yield return null;
             }
 
             while (transform.localScale.x > _originalScale.x)
             {
                 transform.localScale -= Vector3.one * _pulseSpeed * Time.deltaTime;
+
                 yield return null;
             }
 
