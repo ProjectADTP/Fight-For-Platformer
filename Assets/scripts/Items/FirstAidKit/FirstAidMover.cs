@@ -12,7 +12,6 @@ public class FirstAidMover : MonoBehaviour
     private Vector3 _startPosition;
     private float _timer;
 
-
     private void Awake()
     {
         _originalScale = transform.localScale;
@@ -33,7 +32,7 @@ public class FirstAidMover : MonoBehaviour
 
     private IEnumerator Pulse()
     {
-        while (true)
+        while (enabled)
         {
             while (transform.localScale.x < _maxScale)
             {
@@ -53,7 +52,7 @@ public class FirstAidMover : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         StopAllCoroutines();
     }

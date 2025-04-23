@@ -6,8 +6,8 @@ using System.Collections;
 public class Knockback : MonoBehaviour
 {
     [Header("Visual Effects")]
-    [SerializeField] private Color flashColor = Color.red;
-    [SerializeField] private float knockbackForce = 200f;
+    [SerializeField] private Color _flashColor = Color.red;
+    [SerializeField] private float _knockbackForce = 200f;
 
     private Rigidbody2D _rigidbody;
     private Renderer _renderer;
@@ -36,15 +36,20 @@ public class Knockback : MonoBehaviour
             direction = - direction;
 
         _rigidbody.velocity = Vector2.zero;
-        _rigidbody.AddForce(new Vector2(direction.x * knockbackForce, 0));
+        _rigidbody.AddForce(new Vector2(direction.x * _knockbackForce, 0));
 
         if (_renderer != null)
         {
             if (_flashRoutine != null)
-            { 
+            {
                 StopCoroutine(_flashRoutine);
-                _flashRoutine = StartCoroutine(FlashEffect());
             }
+
+            _flashRoutine = StartCoroutine(FlashEffect());
+        }
+        else 
+        {
+            Debug.Log("Render Missing");
         }
     }
 
@@ -55,7 +60,7 @@ public class Knockback : MonoBehaviour
 
         while (elapsedTime < flashDuration)
         {
-            _renderer.material.color = isFlashing ? flashColor : _originalColor;
+            _renderer.material.color = isFlashing ? _flashColor : _originalColor;
             isFlashing = !isFlashing;
 
             yield return _wait;

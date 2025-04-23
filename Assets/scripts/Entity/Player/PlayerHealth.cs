@@ -1,19 +1,16 @@
 ﻿using UnityEngine;
 
-public class Stats : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int _health;
-    [SerializeField] private int _damage;
 
     private int _minHealth = 0;
     private int _maxHealth = 100;
 
-    public int Damage { get; private set; }
     public int Health { get; private set; }
 
     private void Awake()
     {
-        Damage = _damage;
         Health = _health;
     }
 

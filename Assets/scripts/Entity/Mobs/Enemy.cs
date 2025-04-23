@@ -1,22 +1,22 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rotator))]
-[RequireComponent(typeof(Stats))]
 [RequireComponent(typeof(EnemyMover))]
 [RequireComponent(typeof(Vision))]
+[RequireComponent(typeof(EntityDamage))]
+[RequireComponent(typeof(Patrol))]
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Vulnerability _vulnerability;
 
-    private Stats _stats;
     private Patrol _patrol;
     private EnemyMover _mover;
     private Vision _vision;
+    private EntityDamage _damage;
 
     private void Awake()
     {
-        _stats = GetComponent<Stats>();
+        _damage = GetComponent<EntityDamage>();
         _patrol = GetComponent<Patrol>();
         _mover = GetComponent<EnemyMover>();
         _vision = GetComponent<Vision>();
@@ -43,12 +43,6 @@ public class Enemy : MonoBehaviour
         StartPatrol();
     }
 
-    private void Update()
-    {
-        if (_stats.Health <= 0)
-            Destroy(gameObject);
-    }
-
     private void StartPatrol()
     {
         _mover.GoToPoints(_patrol.GivePoints());
@@ -59,12 +53,9 @@ public class Enemy : MonoBehaviour
         _mover.Initialise(target);
     }
 
-    private void TakeDamage(int damage)
+    private void TakeDamage()
     {
-        _stats.TakeDamage(damage);
-
-        if (_stats.Health <= 0)
-            Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public Vector3 GetPosition()
@@ -74,6 +65,6 @@ public class Enemy : MonoBehaviour
 
     public int GetDamage()
     {
-        return _stats.Damage;
+        return _damage.Damage;
     }
 }

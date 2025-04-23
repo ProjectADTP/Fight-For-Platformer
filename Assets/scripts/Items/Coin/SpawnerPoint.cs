@@ -3,5 +3,4 @@
 public class SpawnerPoint : MonoBehaviour
 { 
 
-
 }

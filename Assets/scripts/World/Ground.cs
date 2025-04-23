@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class Ground: MonoBehaviour
+public class Ground: MonoBehaviour
 {
 
 }

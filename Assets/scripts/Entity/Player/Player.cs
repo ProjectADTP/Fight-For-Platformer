@@ -1,8 +1,18 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(CollisionDetector))]
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(Teleporter))]
+[RequireComponent(typeof(Knockback))]
+[RequireComponent(typeof(Jumper))]
+[RequireComponent(typeof(ItemPickupDetector))]
+
 public class Player : MonoBehaviour
 {
-    private Stats _stats;
+    private PlayerHealth _health;
     private CollisionDetector _collisionDetector;
     private InputReader _inputReader;
     private Mover _mover;
@@ -15,7 +25,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        _stats = GetComponent<Stats>();
+        _health = GetComponent<PlayerHealth>();
         _playerAnimator = GetComponent<PlayerAnimator>();
         _inputReader = GetComponent<InputReader>();
         _mover = GetComponent<Mover>();
@@ -29,7 +39,6 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _collisionDetector.TakedHealth += RestoreHealth;
         _collisionDetector.TakedDamage += TakeDamage;
     }
 
@@ -56,27 +65,20 @@ public class Player : MonoBehaviour
             Respawn();
     }
 
-    private void RestoreHealth(int health)
+    private void TakeDamage(Enemy enemy)
     {
-        _stats.RestoreHealth(health);
+        _health.TakeDamage(enemy.GetDamage());
 
-        _collisionDetector.TakedHealth -= RestoreHealth;
-    }
-
-    private void TakeDamage(int damage,Vector3 enemyDirection)
-    {
-        _stats.TakeDamage(damage);
-
-        if (_stats.Health <= 0)
+        if (_health.Health <= 0)
             Respawn();
         else
-            _knockback.ApplyKnockback(enemyDirection);
+            _knockback.ApplyKnockback(enemy.GetPosition());
     }
 
     private void Respawn()
     {
         _teleporter.TeleportToStart(_basePosition);
 
-        _stats.RestoreHealth(0);
+        _health.RestoreHealth(0);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class CollisionDetector : MonoBehaviour
@@ -9,8 +8,7 @@ public class CollisionDetector : MonoBehaviour
     public bool IsGround { get; private set; }
     public bool IsDead { get; private set; }
 
-    public event Action<int, Vector3> TakedDamage;
-    public event Action<int> TakedHealth;
+    public event Action<Enemy> TakedDamage;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -22,21 +20,12 @@ public class CollisionDetector : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<DeadZone>(out _))
             IsDead = true;
-
-        if (collision.gameObject.TryGetComponent<Coin>(out Coin coin))
-            coin.Remove();
-
-        if (collision.gameObject.TryGetComponent<FirstAid>(out FirstAid firstAid))
-        {
-            TakedHealth?.Invoke(firstAid.Health);
-            firstAid.Remove();
-        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
-            TakedDamage?.Invoke(enemy.GetDamage(), enemy.GetPosition());
+            TakedDamage?.Invoke(enemy);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
